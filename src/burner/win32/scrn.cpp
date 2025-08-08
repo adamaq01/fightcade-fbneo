@@ -1169,6 +1169,10 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			VidSelect(4);
 			POST_INITIALISE_MESSAGE;
 			break;
+		case MENU_BLITTER_6:
+			VidSelect(5);
+			POST_INITIALISE_MESSAGE;
+			break;
 #if 0
 		case MENU_BLITTER_6:
 			VidSelect(5);
@@ -3042,6 +3046,8 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 					nVidDX9HardFX = id - MENU_DX9_ALT_HARD_FX_NONE;
 					break;
 			}
+			break;
+		case 5:
 			break;
 	}
 

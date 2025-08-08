@@ -337,6 +337,7 @@ int MenuCreate()
 		hBlitterMenu[2] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_BLITTER_3));	// Software effects blitter
 		hBlitterMenu[3] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_BLITTER_4));	// DirectX 9
 		hBlitterMenu[4] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_BLITTER_5));	// DirectX 9 Alt
+		hBlitterMenu[5] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_BLITTER_6));	// Mister
 
 		hAudioPluginMenu[0] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_AUD_PLUGIN_1));
 		hAudioPluginMenu[1] = FBALoadMenu(hAppInst, MAKEINTRESOURCE(IDR_MENU_AUD_PLUGIN_2));
@@ -1420,6 +1421,7 @@ void MenuEnableItems()
 				EnableMenuItem(hMenu, MENU_BLITTER_3,                   MF_GRAYED | MF_BYCOMMAND);
 				EnableMenuItem(hMenu, MENU_BLITTER_4,                   MF_GRAYED | MF_BYCOMMAND);
 				EnableMenuItem(hMenu, MENU_BLITTER_5,                   MF_GRAYED | MF_BYCOMMAND);
+				EnableMenuItem(hMenu, MENU_BLITTER_6,                   MF_GRAYED | MF_BYCOMMAND);
 				EnableMenuItem(hMenu, MENU_AVISTART,                   MF_GRAYED | MF_BYCOMMAND);
 			}
 		} else {

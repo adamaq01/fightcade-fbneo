@@ -90,6 +90,7 @@ static unsigned int nD3DAdapter;
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "groovymister.h"
 
 bool LoadD3DTextureFromFile(IDirect3DDevice9* device, const char* filename, IDirect3DTexture9*& texture, int& width, int& height)
 {
@@ -1464,6 +1465,8 @@ static int nPreScale = 0;
 static int nPreScaleZoom = 0;
 static int nPreScaleEffect = 0;
 
+static GroovyMister* mister = nullptr;
+
 static int dx9AltScale(RECT* rect, int width, int height);
 
 // Select optimal full-screen resolution
@@ -1510,6 +1513,11 @@ static int dx9AltExit()
 	RELEASE(pD3D)
 
 	nRotateGame = 0;
+
+	if (mister) {
+		mister->CmdClose();
+		mister = nullptr;
+	}
 
 	return 0;
 }
@@ -1919,6 +1927,17 @@ static int dx9AltInit()
 	// Overlay
 	VidOverlayInit(pD3DDevice);
 
+	mister = new GroovyMister();
+	int ret = mister->CmdInit("192.168.1.21", 32100, 0, 0, 0, 2, 0);
+	if (!ret) {
+		FBAPopupAddText(PUF_TEXT_DEFAULT, _T("Mister init failed"));
+		FBAPopupDisplay(PUF_TYPE_ERROR);
+		mister = nullptr;
+
+		return 1;
+	}
+	mister->CmdSwitchres(7.837333, nGameWidth, 400, 437, 500, nGameHeight, 235, 238, 263, 0);
+
 	return 0;
 }
 
@@ -1941,6 +1960,10 @@ static int dx9AltReset()
 
 	nImageWidth = 0;
 	nImageHeight = 0;
+
+	if (mister) {
+		mister->CmdSwitchres(7.837333, nGameWidth, 400, 437, 500, nGameHeight, 235, 238, 263, 0);
+	}
 
 	return 0;
 }
@@ -1967,6 +1990,20 @@ static void VidSCpyImg32(unsigned char* dst, unsigned int dstPitch, unsigned cha
 	}
 }
 
+static void TrucVidSCpyImg32(unsigned char* dst, unsigned int dstPitch, unsigned char* src, unsigned int srcPitch, unsigned short width, unsigned short height)
+{
+	// fast, iterative C version
+	// copies an width*height array of visible pixels from src to dst
+	// srcPitch and dstPitch are the number of garbage bytes after a scanline
+	register unsigned short lineSize = width << 2;
+
+	while (height--) {
+		memcpy(dst, src, lineSize);
+		src += lineSize + srcPitch;
+		dst += lineSize + dstPitch;
+	}
+}
+
 static void VidSCpyImg16(unsigned char* dst, unsigned int dstPitch, unsigned char *src, unsigned int srcPitch, unsigned short width, unsigned short height)
 {
 	register unsigned short lineSize = width << 1;
@@ -1977,6 +2014,9 @@ static void VidSCpyImg16(unsigned char* dst, unsigned int dstPitch, unsigned cha
 		dst += dstPitch;
 	}
 }
+
+static INT32 misterFrameCount = 0;
+extern void MisterLog(char* message, ...);
 
 // Copy BlitFXsMem to pddsBlitFX
 static int dx9AltRender()
@@ -2032,12 +2072,20 @@ static int dx9AltRender()
 			unsigned char* pd = (unsigned char*)d3dlr.pBits;
 
 			if (nPreScaleEffect) {
+				if (mister) {
+					unsigned char* ps = pVidImage + nVidImageLeft * nVidImageBPP;
+					int s = nVidImageWidth * nVidImageBPP;
+					MisterLog("Effect: %d", nVidImageDepth);
+					memcpy(mister->pBufferBlit, ps, nVidImageWidth * nVidImageHeight * nVidImageBPP);
+					mister->CmdBlit(misterFrameCount, 0, 0);
+				}
 				VidFilterApplyEffect(pd, pitch);
 			}
 			else {
 				unsigned char* ps = pVidImage + nVidImageLeft * nVidImageBPP;
 				int s = nVidImageWidth * nVidImageBPP;
 
+				MisterLog("Native: %d Left: %d BPP: %d W: %d H: %d", nVidImageDepth, nVidImageLeft, nVidImageBPP, nVidImageWidth, nVidImageHeight);
 				switch (nVidImageDepth) {
 				case 32:
 					VidSCpyImg32(pd, pitch, ps, s, nVidImageWidth, nVidImageHeight);
@@ -2045,6 +2093,13 @@ static int dx9AltRender()
 				case 16:
 					VidSCpyImg16(pd, pitch, ps, s, nVidImageWidth, nVidImageHeight);
 					break;
+				}
+				if (mister) {
+					memcpy(mister->pBufferBlit, pVidImage, nVidImageWidth * nVidImageHeight * nVidImageBPP);
+					if (kNetLua) {
+						FBA_LuaGui((unsigned char *) mister->pBufferBlit, nVidImageWidth, nVidImageHeight, nVidImageBPP, s);
+					}
+					mister->CmdBlit(misterFrameCount, 0, 0);
 				}
 			}
 
@@ -2107,10 +2162,12 @@ static int dx9AltFrame(bool bRedraw)	// bRedraw = 0
 		if (bRedraw) {				// Redraw current frame
 			if (BurnDrvRedraw()) {
 				BurnDrvFrame();		// No redraw function provided, advance one frame
+				misterFrameCount++;
 			}
 		}
 		else {
 			BurnDrvFrame();			// Run one frame and draw the screen
+			misterFrameCount++;
 		}
 
 		if ((BurnDrvGetFlags() & BDF_16BIT_ONLY) && pVidTransCallback)

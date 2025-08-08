@@ -961,6 +961,7 @@ BEGIN
             MENUITEM "Enhanced\t(Direct3D 7)",				MENU_BLITTER_2
             MENUITEM "Experimental\t(DirectX Graphics 9)",	MENU_BLITTER_4
 			MENUITEM "DirectX9 Alt\t(DirectX Graphics 9)",	MENU_BLITTER_5
+			MENUITEM "Mister",								MENU_BLITTER_6
         END
         /* */
         MENUITEM "&Blitter options",					MENU_BLITTEROPTIONS, GRAYED
@@ -1574,6 +1575,14 @@ BEGIN
         */
 	END
 END
+
+/*IDR_MENU_BLITTER_6 MENU
+BEGIN
+	POPUP "Mister\t(Adamaq01)"
+	BEGIN
+	END
+END
+*/
 
 IDR_MENU_AUD_PLUGIN_1 MENU
 BEGIN

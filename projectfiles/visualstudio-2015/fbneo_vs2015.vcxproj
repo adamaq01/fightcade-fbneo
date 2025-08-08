@@ -307,6 +307,13 @@
     <ClInclude Include="..\..\src\dep\libs\zlib\zconf.h" />
     <ClInclude Include="..\..\src\dep\libs\zlib\zlib.h" />
     <ClInclude Include="..\..\src\dep\libs\zlib\zutil.h" />
+    <ClInclude Include="..\..\src\dep\mister\groovymister.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4file.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4frame.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4frame_static.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4hc.h" />
+    <ClInclude Include="..\..\src\dep\mister\lz4\xxhash.h" />
     <ClInclude Include="..\..\src\intf\audio\aud_dsp.h" />
     <ClInclude Include="..\..\src\intf\audio\lowpass2.h" />
     <ClInclude Include="..\..\src\intf\audio\win32\dsound_core.h" />
@@ -568,6 +575,12 @@
     <ClCompile Include="..\..\src\dep\libs\lua\lvm.c" />
     <ClCompile Include="..\..\src\dep\libs\lua\lzio.c" />
     <ClCompile Include="..\..\src\dep\libs\lua\print.c" />
+    <ClCompile Include="..\..\src\dep\mister\groovymister.cpp" />
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4.c" />
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4file.c" />
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4frame.c" />
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4hc.c" />
+    <ClCompile Include="..\..\src\dep\mister\lz4\xxhash.c" />
     <ClCompile Include="..\..\src\intf\audio\win32\aud_wasapi.cpp" />
     <ClCompile Include="..\..\src\intf\audio\win32\aud_xaudio2.cpp" />
     <ClCompile Include="..\..\src\intf\cd\win32\cd_img.cpp" />
@@ -1505,11 +1518,18 @@ del build_details.exe
     <ClCompile Include="..\..\src\intf\video\win32\vid_ddrawfx.cpp" />
     <ClCompile Include="..\..\src\intf\video\win32\vid_directx9.cpp" />
     <ClCompile Include="..\..\src\intf\video\win32\vid_directx_support.cpp" />
+    <ClCompile Include="..\..\src\intf\video\win32\vid_mister.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\burn\burn_sound_a.asm" />
     <None Include="..\..\src\cpu\e132xs\e132xsop.inc" />
     <None Include="..\..\src\dep\libs\zlib\zconf.h.in" />
+    <None Include="..\..\src\dep\mister\lz4\.gitignore" />
+    <None Include="..\..\src\dep\mister\lz4\liblz4-dll.rc.in" />
+    <None Include="..\..\src\dep\mister\lz4\liblz4.pc.in" />
+    <None Include="..\..\src\dep\mister\lz4\LICENSE" />
+    <None Include="..\..\src\dep\mister\lz4\Makefile" />
+    <None Include="..\..\src\dep\mister\lz4\README.md" />
     <None Include="..\..\src\intf\video\scalers\2xsaimmx.asm" />
     <None Include="..\..\src\intf\video\scalers\eagle_fm.asm" />
     <None Include="..\..\src\intf\video\scalers\hq2x32.asm" />
@@ -1529,7 +1549,7 @@ del build_details.exe
   <PropertyGroup Label="Globals">
     <ProjectGuid>{86D06C32-A849-4988-A176-A38D014C36C1}</ProjectGuid>
     <RootNamespace>fbneo_vs2015</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>fcadefbneo</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -1537,27 +1557,27 @@ del build_details.exe
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

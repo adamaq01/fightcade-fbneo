@@ -946,6 +946,27 @@
     <ClInclude Include="..\..\src\cpu\tms34_intf.h">
       <Filter>cpus</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\groovymister.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4file.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4frame.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4frame_static.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\lz4hc.h">
+      <Filter>mister</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dep\mister\lz4\xxhash.h">
+      <Filter>mister</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\burn\burn.cpp">
@@ -2458,6 +2479,9 @@
       <Filter>interfaces\video\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\intf\video\win32\vid_directx9.cpp">
+      <Filter>interfaces\video\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\vid_mister.cpp">
       <Filter>interfaces\video\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\intf\video\scalers\2xpm.cpp">
@@ -4230,6 +4254,24 @@
     <ClCompile Include="..\..\src\burn\drv\sega\d_segac2.cpp">
       <Filter>Burn\drv\sega</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\groovymister.cpp">
+      <Filter>mister</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4.c">
+      <Filter>mister</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4file.c">
+      <Filter>mister</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4frame.c">
+      <Filter>mister</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\lz4\lz4hc.c">
+      <Filter>mister</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dep\mister\lz4\xxhash.c">
+      <Filter>mister</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Burn">
@@ -4472,6 +4514,9 @@
     <Filter Include="cpus\tms34">
       <UniqueIdentifier>{58a8a59e-3592-4b83-a5b9-c64619a0465e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mister">
+      <UniqueIdentifier>{5016830d-6332-4603-9a7b-66c9aad309c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\burn\burn_sound_a.asm">
@@ -4505,6 +4550,24 @@
       <Filter>cpus\e132xs</Filter>
     </None>
     <None Include="..\..\src\burner\win32\app.rc" />
+    <None Include="..\..\src\dep\mister\lz4\.gitignore">
+      <Filter>mister</Filter>
+    </None>
+    <None Include="..\..\src\dep\mister\lz4\liblz4.pc.in">
+      <Filter>mister</Filter>
+    </None>
+    <None Include="..\..\src\dep\mister\lz4\liblz4-dll.rc.in">
+      <Filter>mister</Filter>
+    </None>
+    <None Include="..\..\src\dep\mister\lz4\LICENSE">
+      <Filter>mister</Filter>
+    </None>
+    <None Include="..\..\src\dep\mister\lz4\Makefile">
+      <Filter>mister</Filter>
+    </None>
+    <None Include="..\..\src\dep\mister\lz4\README.md">
+      <Filter>mister</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\dep\libs\lib7z\7zVersion.rc">

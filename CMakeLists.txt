@@ -1539,6 +1539,16 @@ set(ggpo
 )
 source_group("ggpo" FILES ${ggpo})
 
+set(mister
+        "src/dep/mister/lz4/lz4.h"
+        "src/dep/mister/lz4/lz4.c"
+        "src/dep/mister/lz4/lz4hc.h"
+        "src/dep/mister/lz4/lz4hc.c"
+        "src/dep/mister/groovymister.h"
+        "src/dep/mister/groovymister.cpp"
+)
+source_group("mister" FILES ${mister})
+
 set(interfaces
     "src/intf/interface.h"
 )
@@ -1654,6 +1664,7 @@ set(interfaces__video__win32
     "src/intf/video/win32/vid_font.h"
     "src/intf/video/win32/vid_memorybuffer.cpp"
     "src/intf/video/win32/vid_memorybuffer.h"
+    "src/intf/video/win32/vid_mister.cpp"
     "src/intf/video/win32/vid_overlay.cpp"
     "src/intf/video/win32/vid_overlay.h"
 )
@@ -1920,6 +1931,7 @@ set(ALL_FILES
     ${cpus__z80}
     ${generated}
     ${ggpo}
+    ${mister}
     ${interfaces}
     ${interfaces__audio}
     ${interfaces__audio__win32}
@@ -1994,6 +2006,8 @@ if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/libs/libpng;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/generated;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/ggpo/include;"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister;"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister/lz4;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burner/win32/resource;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/taito;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/misc_post90s;"
@@ -2092,6 +2106,8 @@ elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Win32")
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/libs/lua;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/generated;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/ggpo/include;"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister;"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister/lz4;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burner/win32/resource;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/taito;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/misc_post90s;"

@@ -12,6 +12,7 @@
 	extern struct VidOut VidOutDDrawFX;
 	extern struct VidOut VidOutDX9;
 	extern struct VidOut VidOutDX9Alt;
+	extern struct VidOut VidOutMister;
 #elif defined (BUILD_MACOS)
 	extern struct VidOut VidOutMacOS;
 #elif defined (BUILD_PI)
@@ -35,6 +36,7 @@ static struct VidOut *pVidOut[] = {
 	&VidOutDDrawFX,
 	&VidOutDX9,
 	&VidOutDX9Alt,
+	&VidOutMister,
 #elif defined (BUILD_MACOS)
 	&VidOutMacOS,
 #elif defined (BUILD_PI)
@@ -377,6 +379,8 @@ static void VidDoFrameCallback()
 		}
 	}
 }
+
+extern void MisterLog(char* message, ...);
 
 static INT32 VidDoFrame(bool bRedraw)
 {

@@ -134,6 +134,7 @@ int ConfigAppLoad()
 		VAR(nVidBlitterOpt[2]);
 		VAR(nVidBlitterOpt[3]);
 		VAR(nVidBlitterOpt[4]);
+		VAR(nVidBlitterOpt[5]);
 
 		// DirectDraw blitter
 		VAR(bVidScanHalf);
