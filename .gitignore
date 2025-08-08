@@ -11,3 +11,12 @@ build/
 src/intf/video/win32/detector_buffers.h
 src/intf/video/win32/detector_loaders.h
 UPDATE_GIT_IGNORE.BAT
+
+projectfiles/visualstudio-2015/Release
+projectfiles/visualstudio-2015/x64
+projectfiles/visualstudio-2015/generated
+projectfiles/visualstudio-2015/fcadefbneo
+projectfiles/visualstudio-2015/.vs
+projectfiles/cmake
+cmake-*
+.idea/

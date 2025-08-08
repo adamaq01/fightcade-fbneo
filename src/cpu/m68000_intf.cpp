@@ -79,8 +79,6 @@ cpu_core_config SekConfig =
 	0
 };
 
-#if defined (FBNEO_DEBUG)
-
 void (*SekDbgBreakpointHandlerRead)(UINT32, INT32);
 void (*SekDbgBreakpointHandlerFetch)(UINT32, INT32);
 void (*SekDbgBreakpointHandlerWrite)(UINT32, INT32);
@@ -92,8 +90,6 @@ UINT32 (*SekDbgFetchLongDisassembler)(UINT32);
 static struct { UINT32 address; INT32 id; } BreakpointDataRead[9]  = { { 0, 0 }, };
 static struct { UINT32 address; INT32 id; } BreakpointDataWrite[9] = { { 0, 0 }, };
 static struct { UINT32 address; INT32 id; } BreakpointFetch[9] = { { 0, 0 }, };
-
-#endif
 
 #if defined (EMU_A68K)
 static void UpdateA68KContext()
