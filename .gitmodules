@@ -1,0 +1,3 @@
+[submodule "src/dep/switchres"]
+	path = src/dep/switchres
+	url = git@github.com:antonioginer/switchres.git

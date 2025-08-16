@@ -176,6 +176,9 @@ int ConfigAppLoad()
 		// Runahead
 		VAR(nVidRunahead);
 
+		// Input
+		VAR(nInputSelect);
+
 		// Sound
 		VAR(nAudSelect);
 		VAR(nAudExclusive);
@@ -187,9 +190,12 @@ int ConfigAppLoad()
 		VAR(nAudDSPModule[1]);
 		VAR(nAudSampleRate[2]);
 		VAR(nAudDSPModule[2]);
+		VAR(nAudSampleRate[3]);
+		VAR(nAudDSPModule[3]);
 		VAR(nAudSegCount[0]);
 		VAR(nAudSegCount[1]);
 		VAR(nAudSegCount[2]);
+		VAR(nAudSegCount[3]);
 
 		// Other
 		STR(szPlaceHolder);
@@ -543,6 +549,11 @@ int ConfigAppSave()
 	VAR(nVidRunahead);
 
 	_ftprintf(h, _T("\n\n\n"));
+	_ftprintf(h, _T("// --- Input ------------------------------------------------------------------\n"));
+	_ftprintf(h, _T("\n// The selected input plugin\n"));
+	VAR(nInputSelect);
+
+	_ftprintf(h, _T("\n\n\n"));
 	_ftprintf(h, _T("// --- Sound ------------------------------------------------------------------\n"));
 	_ftprintf(h, _T("\n// The selected audio plugin\n"));
 	VAR(nAudSelect);
@@ -576,6 +587,14 @@ int ConfigAppSave()
 	VAR(nAudSegCount[2]);
 	_ftprintf(h, _T("\n// DSP module to use for sound enhancement: 0 = none, 1 = low-pass filter, 2 = reverb\n"));
 	VAR(nAudDSPModule[2]);
+	_ftprintf(h, _T("\n"));
+	_ftprintf(h, _T("// --- Mister plugin settings ------------------------------------------------\n"));
+	_ftprintf(h, _T("\n// Sample rate\n"));
+	VAR(nAudSampleRate[3]);
+	_ftprintf(h, _T("\n// Number of frames in sound buffer (= sound lag)\n"));
+	VAR(nAudSegCount[3]);
+	_ftprintf(h, _T("\n// DSP module to use for sound enhancement: 0 = none, 1 = low-pass filter, 2 = reverb\n"));
+	VAR(nAudDSPModule[3]);
 
 	_ftprintf(h, _T("\n\n\n"));
 	_ftprintf(h, _T("// --- UI ---------------------------------------------------------------------\n"));

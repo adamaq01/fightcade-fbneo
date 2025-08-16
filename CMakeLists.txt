@@ -1549,8 +1549,25 @@ set(mister
 )
 source_group("mister" FILES ${mister})
 
+set(switchres
+        "src/dep/switchres/switchres.h"
+        "src/dep/switchres/switchres.cpp"
+        "src/dep/switchres/display.h"
+        "src/dep/switchres/display.cpp"
+        "src/dep/switchres/modeline.h"
+        "src/dep/switchres/modeline.cpp"
+        "src/dep/switchres/monitor.h"
+        "src/dep/switchres/monitor.cpp"
+        "src/dep/switchres/log.h"
+        "src/dep/switchres/log.cpp"
+)
+source_group("switchres" FILES ${switchres})
+
 set(interfaces
+    "src/intf/interface.cpp"
     "src/intf/interface.h"
+    "src/intf/mister.cpp"
+    "src/intf/mister.h"
 )
 source_group("interfaces" FILES ${interfaces})
 
@@ -1565,6 +1582,7 @@ source_group("interfaces\\audio" FILES ${interfaces__audio})
 
 set(interfaces__audio__win32
     "src/intf/audio/win32/aud_dsound3.cpp"
+    "src/intf/audio/win32/aud_mister.cpp"
     "src/intf/audio/win32/aud_wasapi.cpp"
     "src/intf/audio/win32/aud_xaudio2.cpp"
     "src/intf/audio/win32/dsound_core.cpp"
@@ -1593,6 +1611,7 @@ set(interfaces__input__win32
     "src/intf/input/win32/dinput_core.cpp"
     "src/intf/input/win32/dinput_core.h"
     "src/intf/input/win32/inp_dinput.cpp"
+    "src/intf/input/win32/inp_mister.cpp"
 )
 source_group("interfaces\\input\\win32" FILES ${interfaces__input__win32})
 
@@ -1607,7 +1626,6 @@ set(interfaces__perf__win32
 source_group("interfaces\\perf\\win32" FILES ${interfaces__perf__win32})
 
 set(interfaces__video
-    "src/intf/interface.cpp"
     "src/intf/video/vid_interface.cpp"
     "src/intf/video/vid_softfx.cpp"
     "src/intf/video/vid_softfx.h"
@@ -1932,6 +1950,7 @@ set(ALL_FILES
     ${generated}
     ${ggpo}
     ${mister}
+    ${switchres}
     ${interfaces}
     ${interfaces__audio}
     ${interfaces__audio__win32}
@@ -2008,6 +2027,7 @@ if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/ggpo/include;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister/lz4;"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/switchres;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burner/win32/resource;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/taito;"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/misc_post90s;"
@@ -2108,6 +2128,7 @@ elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Win32")
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/ggpo/include;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/mister/lz4;"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/dep/switchres;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burner/win32/resource;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/taito;"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/burn/drv/misc_post90s;"

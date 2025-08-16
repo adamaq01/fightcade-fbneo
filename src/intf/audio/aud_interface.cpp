@@ -1,16 +1,16 @@
 // Audio Output
 #include "burner.h"
 
-INT32 nAudSampleRate[8] = { 44100, 44100, 48000, 44100, 44100, 44100, 44100, 44100 };	// sample rate
+INT32 nAudSampleRate[9] = { 44100, 44100, 48000, 44100, 44100, 44100, 44100, 44100, 44100 };	// sample rate
 INT32 nAudVolume = 10000;			// Sound volume (% * 100)
-INT32 nAudSegCount[8] = { 6, 6, 4, 6, 6, 6, 6, 6 };										// Segs in the pdsbLoop buffer
+INT32 nAudSegCount[9] = { 6, 6, 4, 6, 6, 6, 6, 6, 6 };										// Segs in the pdsbLoop buffer
 INT32 nAudSegLen = 0;				// Seg length in samples (calculated from Rate/Fps)
 INT32 nAudExclusive = 0;			// Exclusive mode
 INT32 nAudAllocSegLen = 0;			// Seg length in bytes
 UINT8 bAudOkay = 0;					// True if was initted okay
 UINT8 bAudPlaying = 0;				// True if the Loop buffer is playing
 
-INT32 nAudDSPModule[8] = { 0, };	// DSP module to use: 0 = none, 1 = low-pass filter
+INT32 nAudDSPModule[9] = { 0, };	// DSP module to use: 0 = none, 1 = low-pass filter
 
 INT16* nAudNextSound = NULL;		// The next sound seg we will add to the sample loop
 
@@ -21,6 +21,7 @@ static UINT32 nAudActive = 0;
 	extern struct AudOut AudOutDx;
 	extern struct AudOut AudOutXAudio2;
 	extern struct AudOut AudOutWasapi;
+	extern struct AudOut AudOutMister;
 #elif defined (BUILD_MACOS)
     extern struct AudOut AudOutMacOS;
 #elif defined (BUILD_SDL) 
@@ -46,6 +47,7 @@ static struct AudOut *pAudOut[]=
 	&AudOutDx,
 	&AudOutXAudio2,
 	&AudOutWasapi,
+	&AudOutMister,
 #elif defined (BUILD_MACOS)
     &AudOutMacOS,
 #elif defined (BUILD_SDL) 

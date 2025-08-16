@@ -1102,6 +1102,7 @@ BEGIN
     	    MENUITEM "DirectSound",					MENU_AUD_PLUGIN_1
     	    MENUITEM "XAudio2",						MENU_AUD_PLUGIN_2
 			MENUITEM "Wasapi",						MENU_AUD_PLUGIN_3
+			MENUITEM "Mister",						MENU_AUD_PLUGIN_4
     	END
     	MENUITEM "Plugin &options",					MENU_AUDIO_OPTIONS, GRAYED
     	MENUITEM SEPARATOR
@@ -1122,11 +1123,12 @@ BEGIN
     END
     POPUP "Input"
     BEGIN
-        /* @FC
     	POPUP "Select &plugin"
     	BEGIN
     	    MENUITEM "DirectInput",					MENU_INP_PLUGIN_1, GRAYED
+    	    MENUITEM "Mister",					    MENU_INP_PLUGIN_2, GRAYED
     	END
+        /* @FC
 		MENUITEM SEPARATOR
     	POPUP "&Auto-Fire Rate"
     	BEGIN
@@ -1626,6 +1628,21 @@ BEGIN
         	MENUITEM "44100Hz samplerate",				MENU_WASAPI_44100
         	MENUITEM "48000Hz samplerate",				MENU_WASAPI_48000
 	END
+END
+
+IDR_MENU_AUD_PLUGIN_4 MENU
+BEGIN
+    POPUP "Mister plugin"
+    BEGIN
+        MENUITEM "Use Low-pass filter",					MENU_MISTER_BASS
+        MENUITEM "Use reverb",					        MENU_MISTER_REVERB
+        MENUITEM SEPARATOR
+        MENUITEM "Sound disabled",						MENU_MISTER_NOSOUND
+            MENUITEM "11025Hz samplerate",				MENU_MISTER_11025
+            MENUITEM "22050Hz samplerate",				MENU_MISTER_22050
+            MENUITEM "44100Hz samplerate",				MENU_MISTER_44100
+            MENUITEM "48000Hz samplerate",				MENU_MISTER_48000
+    END
 END
 
 IDR_MENU_GAMESEL MENU 

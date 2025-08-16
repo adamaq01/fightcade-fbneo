@@ -1703,6 +1703,11 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			POST_INITIALISE_MESSAGE;
 			break;
 
+		case MENU_AUD_PLUGIN_4:
+			AudSelect(3);
+			POST_INITIALISE_MESSAGE;
+			break;
+
 		case MENU_DSOUND_NOSOUND:
 			if (!bDrvOkay) {
 				nAudSampleRate[0] = 0;
@@ -1796,6 +1801,37 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			}
 			break;
 
+		case MENU_MISTER_NOSOUND:
+			if (!bDrvOkay) {
+				nAudSampleRate[3] = 0;
+				POST_INITIALISE_MESSAGE;
+			}
+			break;
+		case MENU_MISTER_11025:
+			if (!bDrvOkay) {
+				nAudSampleRate[3] = 11025;
+				POST_INITIALISE_MESSAGE;
+			}
+			break;
+		case MENU_MISTER_22050:
+			if (!bDrvOkay) {
+				nAudSampleRate[3] = 22050;
+				POST_INITIALISE_MESSAGE;
+			}
+			break;
+		case MENU_MISTER_44100:
+			if (!bDrvOkay) {
+				nAudSampleRate[3] = 44100;
+				POST_INITIALISE_MESSAGE;
+			}
+			break;
+		case MENU_MISTER_48000:
+			if (!bDrvOkay) {
+				nAudSampleRate[3] = 48000;
+				POST_INITIALISE_MESSAGE;
+			}
+			break;
+
 		case MENU_FRAMES:
 			if (UseDialogs()) {
 				if (!bDrvOkay) {
@@ -1804,6 +1840,15 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 					POST_INITIALISE_MESSAGE;
 				}
 			}
+			break;
+
+		case MENU_INP_PLUGIN_1:
+			InputSelect(0);
+			POST_INITIALISE_MESSAGE;
+			break;
+		case MENU_INP_PLUGIN_2:
+			InputSelect(1);
+			POST_INITIALISE_MESSAGE;
 			break;
 
 		case MENU_INTERPOLATE_0:
@@ -1844,6 +1889,14 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 
 		case MENU_WASAPI_EXCLUSIVE:
 			nAudExclusive = !nAudExclusive;
+			break;
+
+		case MENU_MISTER_BASS:
+			nAudDSPModule[3] ^= 1;
+			break;
+
+		case MENU_MISTER_REVERB:
+			nAudDSPModule[3] ^= 2;
 			break;
 
 		case MENU_WLOGSTART:

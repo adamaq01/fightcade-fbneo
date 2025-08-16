@@ -18,6 +18,8 @@
 #include <d3d9.h>
 #include <d3dx9effect.h>
 
+#include "display.h"
+
 const float PI = 3.14159265358979323846f;
 
 typedef struct _D3DLVERTEX2 {
@@ -90,7 +92,7 @@ static unsigned int nD3DAdapter;
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "groovymister.h"
+#include "mister.h"
 
 bool LoadD3DTextureFromFile(IDirect3DDevice9* device, const char* filename, IDirect3DTexture9*& texture, int& width, int& height)
 {
@@ -1465,8 +1467,6 @@ static int nPreScale = 0;
 static int nPreScaleZoom = 0;
 static int nPreScaleEffect = 0;
 
-static GroovyMister* mister = nullptr;
-
 static int dx9AltScale(RECT* rect, int width, int height);
 
 // Select optimal full-screen resolution
@@ -1514,10 +1514,7 @@ static int dx9AltExit()
 
 	nRotateGame = 0;
 
-	if (mister) {
-		mister->CmdClose();
-		mister = nullptr;
-	}
+	MisterExit();
 
 	return 0;
 }
@@ -1730,7 +1727,6 @@ static int dx9AltSetHardFX(int nHardFX)
 	return r;
 }
 
-
 static int dx9AltInit()
 {
 	if (hScrnWnd == NULL) {
@@ -1927,16 +1923,14 @@ static int dx9AltInit()
 	// Overlay
 	VidOverlayInit(pD3DDevice);
 
-	mister = new GroovyMister();
-	int ret = mister->CmdInit("192.168.1.21", 32100, 0, 0, 0, 2, 0);
-	if (!ret) {
+	// Mister
+	if (MisterInit()) {
 		FBAPopupAddText(PUF_TEXT_DEFAULT, _T("Mister init failed"));
 		FBAPopupDisplay(PUF_TYPE_ERROR);
-		mister = nullptr;
 
 		return 1;
 	}
-	mister->CmdSwitchres(7.837333, nGameWidth, 400, 437, 500, nGameHeight, 235, 238, 263, 0);
+	MisterSwitchres(nGameWidth, nGameHeight, ((float) nBurnFPS) / 100.0f);
 
 	return 0;
 }
@@ -1961,9 +1955,7 @@ static int dx9AltReset()
 	nImageWidth = 0;
 	nImageHeight = 0;
 
-	if (mister) {
-		mister->CmdSwitchres(7.837333, nGameWidth, 400, 437, 500, nGameHeight, 235, 238, 263, 0);
-	}
+	MisterSwitchres(nGameWidth, nGameHeight, ((float) nBurnFPS) / 100.0f);
 
 	return 0;
 }
@@ -2014,9 +2006,6 @@ static void VidSCpyImg16(unsigned char* dst, unsigned int dstPitch, unsigned cha
 		dst += dstPitch;
 	}
 }
-
-static INT32 misterFrameCount = 0;
-extern void MisterLog(char* message, ...);
 
 // Copy BlitFXsMem to pddsBlitFX
 static int dx9AltRender()
@@ -2072,12 +2061,11 @@ static int dx9AltRender()
 			unsigned char* pd = (unsigned char*)d3dlr.pBits;
 
 			if (nPreScaleEffect) {
-				if (mister) {
+				if (MisterIsReady()) {
 					unsigned char* ps = pVidImage + nVidImageLeft * nVidImageBPP;
 					int s = nVidImageWidth * nVidImageBPP;
-					MisterLog("Effect: %d", nVidImageDepth);
-					memcpy(mister->pBufferBlit, ps, nVidImageWidth * nVidImageHeight * nVidImageBPP);
-					mister->CmdBlit(misterFrameCount, 0, 0);
+					memcpy(MisterGetBufferBlit(), ps, nVidImageWidth * nVidImageHeight * nVidImageBPP);
+					MisterBlit(0, 0);
 				}
 				VidFilterApplyEffect(pd, pitch);
 			}
@@ -2085,7 +2073,6 @@ static int dx9AltRender()
 				unsigned char* ps = pVidImage + nVidImageLeft * nVidImageBPP;
 				int s = nVidImageWidth * nVidImageBPP;
 
-				MisterLog("Native: %d Left: %d BPP: %d W: %d H: %d", nVidImageDepth, nVidImageLeft, nVidImageBPP, nVidImageWidth, nVidImageHeight);
 				switch (nVidImageDepth) {
 				case 32:
 					VidSCpyImg32(pd, pitch, ps, s, nVidImageWidth, nVidImageHeight);
@@ -2094,12 +2081,12 @@ static int dx9AltRender()
 					VidSCpyImg16(pd, pitch, ps, s, nVidImageWidth, nVidImageHeight);
 					break;
 				}
-				if (mister) {
-					memcpy(mister->pBufferBlit, pVidImage, nVidImageWidth * nVidImageHeight * nVidImageBPP);
+				if (MisterIsReady()) {
+					memcpy(MisterGetBufferBlit(), pVidImage, nVidImageWidth * nVidImageHeight * nVidImageBPP);
 					if (kNetLua) {
-						FBA_LuaGui((unsigned char *) mister->pBufferBlit, nVidImageWidth, nVidImageHeight, nVidImageBPP, s);
+						FBA_LuaGui((unsigned char *) MisterGetBufferBlit(), nVidImageWidth, nVidImageHeight, nVidImageBPP, s);
 					}
-					mister->CmdBlit(misterFrameCount, 0, 0);
+					MisterBlit(0, 0);
 				}
 			}
 
@@ -2135,6 +2122,8 @@ static int dx9AltRender()
 
 	dx9AltSetHardFX(nVidDX9HardFX);
 
+    MisterWaitSync();
+
 	return 0;
 }
 
@@ -2162,12 +2151,12 @@ static int dx9AltFrame(bool bRedraw)	// bRedraw = 0
 		if (bRedraw) {				// Redraw current frame
 			if (BurnDrvRedraw()) {
 				BurnDrvFrame();		// No redraw function provided, advance one frame
-				misterFrameCount++;
+				MisterFrame();
 			}
 		}
 		else {
 			BurnDrvFrame();			// Run one frame and draw the screen
-			misterFrameCount++;
+			MisterFrame();
 		}
 
 		if ((BurnDrvGetFlags() & BDF_16BIT_ONLY) && pVidTransCallback)

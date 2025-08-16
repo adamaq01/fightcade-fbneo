@@ -9,6 +9,7 @@ static bool bCinpOkay;
 
 #if defined (BUILD_WIN32)
 	extern struct InputInOut InputInOutDInput;
+	extern struct InputInOut InputInOutMister;
 #elif defined (BUILD_MACOS)
     extern struct InputInOut InputInOutMacOS;
 #elif defined (BUILD_SDL)
@@ -25,6 +26,7 @@ static struct InputInOut *pInputInOut[]=
 {
 #if defined (BUILD_WIN32)
 	&InputInOutDInput,
+	&InputInOutMister,
 #elif defined (BUILD_MACOS)
     &InputInOutMacOS,
 #elif defined (BUILD_SDL2)
@@ -561,4 +563,14 @@ InterfaceInfo* InputGetInfo()
 	}
 
 	return &InpInfo;
+}
+
+INT32 InputSelect(UINT32 nPlugIn)
+{
+	if (nPlugIn < INPUT_LEN) {
+		nInputSelect = nPlugIn;
+		return 0;
+	}
+
+	return 1;
 }
