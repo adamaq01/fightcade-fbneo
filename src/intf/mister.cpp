@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "switchres.h"
+#include "tchar.h"
 
 GroovyMister *pMister = nullptr;
 INT32 misterFrameCount = 0;
@@ -12,6 +13,7 @@ struct change_res {
     int height;
     float refreshRate;
 };
+
 change_res current_res = {0, 0, 0.0f};
 change_res *pSetRes = nullptr;
 
@@ -19,19 +21,33 @@ struct change_audio {
     uint32_t sampleRate;
     uint16_t channels;
 };
+
 change_audio current_audio = {0, 0};
-bool bSetAudio = false;
 
 bool bInitInput = false;
 
+char misterHost[256] = {0};
+TCHAR szMisterHost[MAX_PATH] = _T("");
+INT32 nMisterLz4Frames = 0;
+
+HANDLE waitSyncThread = nullptr;
+HANDLE waitSyncEvent = nullptr;
+HANDLE waitSyncEvent2 = nullptr;
+
+void waitSyncProc(void *param) {
+    HANDLE event = (HANDLE) param;
+    while (true) {
+        WaitForSingleObject(event, INFINITE);
+        if (pMister) {
+            pMister->WaitSync();
+        }
+        ResetEvent(event);
+        SetEvent(waitSyncEvent2);
+    }
+}
+
 int MisterInit() {
     if (pMister) {
-        if (bSetAudio) {
-            MisterExit();
-            bSetAudio = false; // Reset audio settings
-            return MisterInit(); // Reinitialize if audio settings have changed
-        }
-
         return 0; // Already initialized
     }
 
@@ -44,8 +60,23 @@ int MisterInit() {
     }
 
     auto *mister = new GroovyMister();
-    int ret = mister->CmdInit("192.168.1.21", 32100, 0, current_audio.sampleRate, current_audio.channels, 2, 0);
-    if (!ret) {
+
+    // Convert TCHAR to char for misterHost
+#ifdef _UNICODE
+    size_t convertedChars = 0;
+    wcstombs_s(&convertedChars, misterHost, szMisterHost, sizeof(misterHost));
+#else
+    strncpy_s(misterHost, szMisterHost, sizeof(misterHost));
+#endif
+
+    // Initialize inputs before CmdInit if requested, if done after it will be ignored
+    if (bInitInput) {
+        mister->BindInputs(misterHost, 32101);
+    }
+
+    int ret = mister->CmdInit(misterHost, 32100, nMisterLz4Frames, current_audio.sampleRate, current_audio.channels, 2,
+                              0);
+    if (ret) {
         delete mister;
         mister = nullptr;
         delete switchres;
@@ -63,14 +94,25 @@ int MisterInit() {
         }
     }
 
-    if (bInitInput) {
-        mister->BindInputs("192.168.1.21", 32101);
+    if (!waitSyncThread) {
+        waitSyncEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+        waitSyncEvent2 = CreateEvent(NULL, TRUE, FALSE, NULL);
+        waitSyncThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) waitSyncProc, waitSyncEvent, 0, NULL);
     }
 
     pSetRes = &current_res;
     pMister = mister;
     misterFrameCount = 0;
     return 0; // Success
+}
+
+int MisterReset() {
+    if (pMister) {
+        MisterExit();
+        return MisterInit();
+    }
+
+    return 0;
 }
 
 void MisterSwitchres(int nGameWidth, int nGameHeight, float refreshRate) {
@@ -88,38 +130,35 @@ void MisterSwitchres(int nGameWidth, int nGameHeight, float refreshRate) {
                                   modeline->hend, modeline->htotal, modeline->vactive, modeline->vbegin, modeline->vend,
                                   modeline->vtotal, modeline->interlace ? 1 : 0);
         }
-    } else {
-        pSetRes = &current_res;
     }
+    pSetRes = &current_res;
 }
 
 char *MisterGetBufferBlit() {
     if (pMister) {
-        return pMister->pBufferBlit;
+        return pMister->getPBufferBlit(0);
     }
     return nullptr;
 }
 
 void MisterBlit(int vCountSync, int margin) {
     if (pMister) {
-        pMister->CmdBlit(misterFrameCount, vCountSync, margin);
+        pMister->CmdBlit(misterFrameCount, 0, vCountSync, margin, 0);
     }
 }
 
-void MisterSetAudio(uint32_t sampleRate, uint16_t channels) {
+int MisterSetAudio(uint32_t sampleRate, uint16_t channels) {
     if (current_audio.sampleRate == sampleRate && current_audio.channels == channels) {
-        return;
+        return 0;
     }
     current_audio = {sampleRate, channels};
 
-    if (pMister) {
-        bSetAudio = true;
-    }
+    return MisterReset();
 }
 
 char *MisterGetBufferAudio() {
     if (pMister) {
-        return pMister->pBufferAudio;
+        return pMister->getPBufferAudio();
     }
     return nullptr;
 }
@@ -135,7 +174,15 @@ void MisterExit() {
         pMister->CmdClose();
         delete pMister;
         pMister = nullptr;
-        bInitInput = false; // Reset input initialization state
+
+        TerminateThread(waitSyncThread, 0);
+        WaitForSingleObject(waitSyncThread, INFINITE);
+        CloseHandle(waitSyncThread);
+        waitSyncThread = nullptr;
+        CloseHandle(waitSyncEvent);
+        waitSyncEvent = nullptr;
+        CloseHandle(waitSyncEvent2);
+        waitSyncEvent2 = nullptr;
     }
 }
 
@@ -147,20 +194,31 @@ bool MisterIsReady() {
     return pMister != nullptr;
 }
 
-void MisterWaitSync() {
-    if (pMister) {
-        pMister->WaitSync();
+int MisterWaitSync() {
+    if (pMister && waitSyncThread && waitSyncEvent && waitSyncEvent2) {
+        SetEvent(waitSyncEvent);
+        if (WaitForSingleObject(waitSyncEvent2, 300) != WAIT_OBJECT_0) {
+            ResetEvent(waitSyncEvent2);
+            ResetEvent(waitSyncEvent);
+            return MisterReset();
+        }
+        ResetEvent(waitSyncEvent2);
+    } else {
+        MisterExit();
+        return MisterInit();
     }
+
+    return 0;
 }
 
-void MisterInputInit() {
-    if (bInitInput) {
-        return; // Already initialized
-    }
-    bInitInput = true;
+int MisterUseInput(bool bSetup) {
+    bInitInput = bSetup;
     if (pMister) {
-        pMister->BindInputs("192.168.1.21", 32101);
+        MisterExit();
+        return MisterInit();
     }
+
+    return 0;
 }
 
 void MisterInputPoll() {

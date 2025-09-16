@@ -179,6 +179,10 @@ int ConfigAppLoad()
 		// Input
 		VAR(nInputSelect);
 
+		// Mister
+		STR(szMisterHost);
+		VAR(nMisterLz4Frames);
+
 		// Sound
 		VAR(nAudSelect);
 		VAR(nAudExclusive);
@@ -552,6 +556,13 @@ int ConfigAppSave()
 	_ftprintf(h, _T("// --- Input ------------------------------------------------------------------\n"));
 	_ftprintf(h, _T("\n// The selected input plugin\n"));
 	VAR(nInputSelect);
+
+	_ftprintf(h, _T("\n\n\n"));
+	_ftprintf(h, _T("// --- Mister -----------------------------------------------------------------\n"));
+	_ftprintf(h, _T("\n// The IP address or hostname of the MiSTer device\n"));
+	STR(szMisterHost);
+	_ftprintf(h, _T("\n// Whether to use LZ4 frames for video transfer (0 = raw, 1 = lz4, 2 = lz4hc, 3 = lz4 adaptative)\n"));
+	VAR(nMisterLz4Frames);
 
 	_ftprintf(h, _T("\n\n\n"));
 	_ftprintf(h, _T("// --- Sound ------------------------------------------------------------------\n"));

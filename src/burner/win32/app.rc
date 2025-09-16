@@ -961,7 +961,7 @@ BEGIN
             MENUITEM "Enhanced\t(Direct3D 7)",				MENU_BLITTER_2
             MENUITEM "Experimental\t(DirectX Graphics 9)",	MENU_BLITTER_4
 			MENUITEM "DirectX9 Alt\t(DirectX Graphics 9)",	MENU_BLITTER_5
-			MENUITEM "Mister",								MENU_BLITTER_6
+			// MENUITEM "Mister",								MENU_BLITTER_6
         END
         /* */
         MENUITEM "&Blitter options",					MENU_BLITTEROPTIONS, GRAYED
@@ -1277,6 +1277,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Save settings to .ini now",				MENU_SAVESET
         MENUITEM "Reload settings from .ini",				MENU_LOADSET
+        MENUITEM SEPARATOR
+        MENUITEM "Reset Mister connection",	    			MENU_MISTER_RESET
     END
     POPUP "Help"
     BEGIN

@@ -380,8 +380,6 @@ static void VidDoFrameCallback()
 	}
 }
 
-extern void MisterLog(char* message, ...);
-
 static INT32 VidDoFrame(bool bRedraw)
 {
 	INT32 nRet;

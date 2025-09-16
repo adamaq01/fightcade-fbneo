@@ -1924,12 +1924,13 @@ static int dx9AltInit()
 	VidOverlayInit(pD3DDevice);
 
 	// Mister
-	if (MisterInit()) {
+	MisterInit();
+	/*if (MisterInit()) {
 		FBAPopupAddText(PUF_TEXT_DEFAULT, _T("Mister init failed"));
 		FBAPopupDisplay(PUF_TYPE_ERROR);
 
 		return 1;
-	}
+	}*/
 	MisterSwitchres(nGameWidth, nGameHeight, ((float) nBurnFPS) / 100.0f);
 
 	return 0;
@@ -1979,20 +1980,6 @@ static void VidSCpyImg32(unsigned char* dst, unsigned int dstPitch, unsigned cha
 		memcpy(dst, src, lineSize);
 		src += srcPitch;
 		dst += dstPitch;
-	}
-}
-
-static void TrucVidSCpyImg32(unsigned char* dst, unsigned int dstPitch, unsigned char* src, unsigned int srcPitch, unsigned short width, unsigned short height)
-{
-	// fast, iterative C version
-	// copies an width*height array of visible pixels from src to dst
-	// srcPitch and dstPitch are the number of garbage bytes after a scanline
-	register unsigned short lineSize = width << 2;
-
-	while (height--) {
-		memcpy(dst, src, lineSize);
-		src += lineSize + srcPitch;
-		dst += lineSize + dstPitch;
 	}
 }
 

@@ -55,6 +55,10 @@ std::vector<const InputInOut *> InputGetInterfaces();
 extern bool bInputOkay;
 extern UINT32 nInputSelect;
 
+// Mister
+extern TCHAR szMisterHost[MAX_PATH];
+extern INT32 nMisterLz4Frames;
+
 // CD emulation module
 
 struct CDEmuDo {

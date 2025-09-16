@@ -630,6 +630,7 @@
 #define MENU_SAVEGAMEINPUT					10333
 #define MENU_SAVESET                    	10334
 #define MENU_LOADSET                    	10335
+#define MENU_MISTER_RESET                   10359
 #define MENU_STARTLOG                   	10390
 #define MENU_STOPLOG                    	10391
 #define MENU_DEBUG							10392

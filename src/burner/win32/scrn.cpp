@@ -2,6 +2,7 @@
 #include "burner.h"
 #include "luaengine.h"
 #include <shlobj.h>
+#include "mister.h"
 
 #define		HORIZONTAL_ORIENTED_RES		0
 #define		VERTICAL_ORIENTED_RES			1
@@ -2429,6 +2430,10 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 
 		case MENU_SAVESET:
 			ConfigAppSave();
+			break;
+
+		case MENU_MISTER_RESET:
+			MisterReset();
 			break;
 
 		case MENU_LOADSET:

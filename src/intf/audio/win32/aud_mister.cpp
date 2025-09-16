@@ -3,8 +3,6 @@
 #include <audioclient.h>
 #include "mister.h"
 
-extern void MisterLog(char* message, ...);
-
 int MisterBlankSound()
 {
 	// Also blank the nAudNextSound buffer
@@ -26,9 +24,6 @@ static int MisterSoundInit()
 	nAudAllocSegLen = nAudSegLen << 2; // 16 bit, 2 channels
 
 	MisterSetAudio(nAudSampleRate[3], 2);
-    if (MisterInit()) {
-        return 1;
-    }
 
 	// the next sound frame to put in the stream
 	nAudNextSound = (short*)malloc(nAudAllocSegLen);
@@ -67,8 +62,10 @@ static int MisterSoundFrame()
 		DspDo(nAudNextSound, nAudSegLen);
 	}
 
-    memcpy(MisterGetBufferAudio(), nAudNextSound, nAudAllocSegLen);
-    MisterSendAudio(nAudAllocSegLen);
+	if (MisterIsReady()) {
+		memcpy(MisterGetBufferAudio(), nAudNextSound, nAudAllocSegLen);
+		MisterSendAudio(nAudAllocSegLen);
+	}
 
 	return 0;
 }

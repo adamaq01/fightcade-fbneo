@@ -6,18 +6,19 @@
 int MisterInit();
 void MisterFrame();
 bool MisterIsReady();
-void MisterWaitSync();
+int MisterWaitSync();
 void MisterExit();
+int MisterReset();
 
 void MisterSwitchres(int nGameWidth, int nGameHeight, float refreshRate);
 char *MisterGetBufferBlit();
 void MisterBlit(int vCountSync, int margin);
 
-void MisterSetAudio(uint32_t sampleRate, uint16_t channels);
+int MisterSetAudio(uint32_t sampleRate, uint16_t channels);
 char *MisterGetBufferAudio();
 void MisterSendAudio(uint16_t soundSize);
 
-void MisterInputInit();
+int MisterUseInput(bool bSetup);
 void MisterInputPoll();
 fpgaJoyInputs MisterInputJoyGet();
 fpgaPS2Inputs MisterInputKeyGet();
